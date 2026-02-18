@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en"><head><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-1CQ4D3VQ3L"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-1CQ4D3VQ3L');
+  </script>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Rolling Hills Engine: Procedural Pixel Art Landscape Creator</title>
+
+<meta name="description" content="Generate infinite rolling hills and dunal landscapes with this procedural engine. Customize lighting and themes to export 4K pixel art wallpapers.">
+<meta name="keywords" content="procedural landscape, pixel art generator, terrain engine, wallpaper creator, digital art, generative art, retro graphics, visualizer">
+<meta name="author" content="Chris Pirillo">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0f172a">
+
+<meta property="og:site_name" content="Chris Pirillo's Arcade">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rolling Hills Engine: Procedural Landscape Creator">
+<meta property="og:description" content="Generate infinite rolling hills and dunal landscapes with this procedural engine. Customize lighting and themes to export 4K pixel art wallpapers.">
+<meta property="og:url" content="https://pirillo.com/arcade/rolling-hills.html">
+<meta property="og:image" content="https://pirillo.com/arcade/images/rolling-hills.png">
+<meta property="og:image:alt" content="Rolling Hills Engine: Procedural Landscape Creator">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ChrisPirillo">
+<meta name="twitter:creator" content="@ChrisPirillo">
+<meta name="twitter:title" content="Rolling Hills Engine: Procedural Landscape Creator">
+<meta name="twitter:description" content="Generate infinite rolling hills and dunal landscapes with this procedural engine. Customize lighting and themes to export 4K pixel art wallpapers.">
+<meta name="twitter:image" content="https://pirillo.com/arcade/images/rolling-hills.png">
+<meta name="twitter:domain" content="pirillo.com">
+
+<link rel="canonical" href="https://pirillo.com/arcade/rolling-hills.html">
+
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Rolling Hills Engine: Procedural Landscape Creator",
+  "description": "Generate infinite rolling hills and dunal landscapes with this procedural engine. Customize lighting and themes to export 4K pixel art wallpapers.",
+  "keywords": "procedural landscape, pixel art generator, terrain engine, wallpaper creator, digital art, generative art, retro graphics, visualizer",
+  "url": "https://pirillo.com/arcade/rolling-hills.html",
+  "image": "https://pirillo.com/arcade/images/rolling-hills.png",
+  "primaryImageOfPage": {
+    "@type": "ImageObject",
+    "url": "https://pirillo.com/arcade/images/rolling-hills.png"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Chris Pirillo",
+    "url": "https://pirillo.com",
+    "sameAs": [
+      "https://x.com/ChrisPirillo"
+    ]
+  },
+  "mainEntity": {
+    "name": "Rolling Hills Engine: Procedural Landscape Creator",
+    "description": "Generate infinite rolling hills and dunal landscapes with this procedural engine. Customize lighting and themes to export 4K pixel art wallpapers.",
+    "image": "https://pirillo.com/arcade/images/rolling-hills.png",
+    "operatingSystem": "Web Browser",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Pirillo"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "@type": "WebApplication",
+    "applicationCategory": "Simulation"
+  }
+}</script>
+
+<meta charset="UTF-8">
+<style>:root { --bg: #050505; --panel: rgba(15, 15, 15, 0.95); --text: #cdcdcd; --accent: #50c878; --border: #333; --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); overflow: hidden; user-select: none; -webkit-user-select: none; }
+#canvas-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #000; }
+canvas { image-rendering: pixelated; box-shadow: 0 0 50px rgba(0,0,0,0.8); transition: opacity 0.4s cubic-bezier(0.4, 0.0, 0.2, 1); }
+#ui-layer { position: absolute; inset: 0; pointer-events: none; z-index: 10; }
+#menu-btn { position: absolute; top: 20px; left: 20px; width: 44px; height: 44px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; pointer-events: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; transition: 0.2s; }
+#menu-btn:hover { border-color: var(--accent); }
+#menu-btn div { width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
+#settings { position: absolute; top: 0; left: 0; height: 100%; width: 340px; background: var(--panel); backdrop-filter: blur(12px); border-right: 1px solid var(--border); transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: auto; display: flex; flex-direction: column; z-index: 100; }
+#settings.open { transform: translateX(0); }
+.header { height: 70px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); font-weight: 700; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; color: var(--accent); gap: 10px; }
+.close-btn { position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text); font-size: 24px; cursor: pointer; }
+.scroll-area { flex: 1; overflow-y: auto; padding: 25px; }
+.section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #666; margin: 25px 0 10px 0; letter-spacing: 1px; }
+.section-label:first-child { margin-top: 0; }
+.ctrl-row { margin-bottom: 15px; }
+.ctrl-head { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
+input[type="range"] { width: 100%; -webkit-appearance: none; background: #222; height: 4px; border-radius: 2px; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px var(--accent); }
+select { width: 100%; padding: 10px; margin-bottom: 15px; background: #222; border: 1px solid #333; color: var(--text); border-radius: 4px; outline: none; }
+select optgroup { color: #888; font-style: normal; font-weight: 700; }
+select option { color: #fff; }
+.btn { width: 100%; padding: 14px; margin-bottom: 12px; background: #222; border: 1px solid #333; color: var(--text); font-weight: 600; font-size: 13px; cursor: pointer; border-radius: 6px; transition: 0.2s; }
+.btn:hover { background: #333; border-color: #555; }
+.btn.primary { background: var(--accent); color: #000; border: none; }
+.btn.primary:hover { opacity: 0.9; }
+.info-trigger { width: 18px; height: 18px; border: 1px solid #666; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #666; cursor: pointer; transition: 0.2s; }
+.info-trigger:hover { color: var(--accent); border-color: var(--accent); }
+#modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200; }
+#modal.active { opacity: 1; pointer-events: auto; }
+.modal-card { background: #1a1a1a; width: 90%; max-width: 450px; padding: 30px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; }
+.modal-card h2 { margin-top: 0; color: var(--accent); font-size: 18px; margin-bottom: 15px;}
+.modal-card p { font-size: 14px; line-height: 1.6; color: #aaa; margin-bottom: 25px; text-align: left; }
+.modal-links { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #333; padding-top: 20px; }
+.modal-links a { color: var(--text); text-decoration: none; font-size: 14px; padding: 10px; background: #222; border-radius: 6px; transition: 0.2s; border: 1px solid #333; font-weight: 600; }
+.modal-links a:hover { background: #333; border-color: var(--accent); color: var(--accent); }
+@media (max-width: 700px) { #settings { width: 100%; }
+}</style>
+</head>
+<body><h1 style="display: none;">Rolling Hills Engine: Procedural Landscape Creator</h1>
+
+    <div id="canvas-wrapper">
+        <canvas id="main-canvas"></canvas>
+    </div>
+
+    <div id="ui-layer">
+        <div id="menu-btn"><div></div><div></div><div></div></div>
+        
+        <div id="settings">
+            <header class="header">
+                Rolling Hills
+                <div class="info-trigger" id="info-btn">?</div>
+                <button class="close-btn">×</button>
+            </header>
+            <div class="scroll-area">
+                <div class="section-label">Generator</div>
+                <div class="ctrl-row">
+                    <button class="btn primary" id="btn-rand">Randomize Everything</button>
+                    <button class="btn" id="btn-dl">Export 4K Wallpaper</button>
+                </div>
+
+                <div class="section-label">Theme</div>
+                <select id="theme-select"></select>
+
+                <div class="section-label">Parameters</div>
+                <div id="dynamic-controls"></div>
+
+                <div class="section-label">System</div>
+                <button class="btn" id="btn-reset">Reset Defaults</button>
+                <button class="btn" id="btn-export">Export Settings</button>
+                <button class="btn" id="btn-import">Import Settings</button>
+                <input type="file" id="file-in" style="display:none" accept=".json">
+            </div>
+        </div>
+    </div>
+
+    <div id="modal">
+        <div class="modal-card">
+            <h2>About</h2>
+            <p>
+                A dedicated procedural engine for generating infinite rolling hills and dunal landscapes.
+                <br><br>
+                <strong>Desktop:</strong> Click to Randomize. Drag to Pan. Scroll to Zoom.<br>
+                <strong>Mobile:</strong> Double-tap to Randomize.
+            </p>
+            <div class="modal-links">
+                <a href="https://pirillo.com/arcade/" target="_blank">More Apps</a>
+                <a href="https://chris.pirillo.com/" target="_blank">Follow Chris</a>
+                <a href="https://ctrlaltcreate.live/" target="_blank">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+<script>
+/**
+ * ROLLING HILLS ENGINE
+ * V3.4: UI Updates & Escape Logic
+ */
+
+const State = {
+    seed: Math.random(),
+    width: 320,
+    height: 180,
+    time: 0.5,
+    fog: 0.4,
+    detail: 0.5,
+    noise: 20, 
+    
+    // Theme System
+    theme: 'natural',
+    skyHue: 200,    
+    hillHue: 100,   
+    hillVariant: 15,
+    globalSat: 1.0, 
+    
+    // Celestial
+    celestialX: 0.7, 
+    celestialY: 0.15,
+    celestialScale: 1.0, 
+};
+
+let isFading = false;
+const canvas = document.getElementById('main-canvas');
+const ctx = canvas.getContext('2d');
+const buffer = document.createElement('canvas');
+const bCtx = buffer.getContext('2d');
+
+const Rnd = {
+    val: (min, max) => min + Math.random() * (max - min),
+    int: (min, max) => Math.floor(min + Math.random() * (max - min + 1)),
+    pick: (arr) => arr[Math.floor(Math.random() * arr.length)]
+};
+
+// --- THEME DEFINITIONS ---
+const THEMES = {
+    'natural': { type: 'dynamic', group: 'Dynamic' },
+    
+    'gameboy': { type: 'static', group: 'Retro', bgTop: '#9bbc0f', bgBot: '#8bac0f', sun: '#9bbc0f', palette: ['#0f380f', '#306230', '#8bac0f'] },
+    'cga_1': { type: 'static', group: 'Retro', bgTop: '#000000', bgBot: '#555555', sun: '#ff55ff', palette: ['#000000', '#55ffff', '#ff55ff', '#ffffff'] }, 
+    'cga_2': { type: 'static', group: 'Retro', bgTop: '#000000', bgBot: '#555500', sun: '#ffff55', palette: ['#000000', '#00aa00', '#aa0000', '#ffff55'] }, 
+    'macintosh': { type: 'static', group: 'Retro', bgTop: '#ffffff', bgBot: '#aaaaaa', sun: '#ffffff', palette: ['#000000', '#555555', '#aaaaaa'] },
+    'sepia': { type: 'static', group: 'Retro', bgTop: '#eaddcf', bgBot: '#d0bba9', sun: '#fff', palette: ['#423226', '#634b39', '#85644c', '#a67d5e'] },
+    'blueprint': { type: 'static', group: 'Retro', bgTop: '#0033aa', bgBot: '#0044cc', sun: '#ffffff', palette: ['#002288', '#0033aa', '#0044cc', '#ffffff'] },
+    'matrix': { type: 'static', group: 'Retro', bgTop: '#000000', bgBot: '#002200', sun: '#00ff00', palette: ['#001100', '#003300', '#006600', '#00aa00', '#00ff00'] },
+    
+    'synthwave': { type: 'dynamic_hue', group: 'Aesthetic', hBase: 260, hVar: 40, s: 80, lBase: 10, bgTop: '#1a0b2e', bgBot: '#43125e', sun: '#ff00aa' },
+    'vaporwave': { type: 'dynamic_hue', group: 'Aesthetic', hBase: 320, hVar: -40, s: 60, lBase: 60, bgTop: '#ff99cc', bgBot: '#99ccff', sun: '#ffffaa' },
+    'cottoncandy': { type: 'dynamic_hue', group: 'Aesthetic', hBase: 300, hVar: 30, s: 60, lBase: 75, bgTop: '#ccf0ff', bgBot: '#ffccf0', sun: '#ffffff' },
+    'crimson': { type: 'static', group: 'Aesthetic', bgTop: '#1a0000', bgBot: '#400000', sun: '#ff0000', palette: ['#1a0000', '#400000', '#800000', '#cc0000'] },
+    'noir': { type: 'static', group: 'Aesthetic', bgTop: '#111', bgBot: '#444', sun: '#fff', palette: ['#000', '#222', '#555', '#999'] },
+    'pop_art': { type: 'static', group: 'Aesthetic', bgTop: '#ff0', bgBot: '#f0f', sun: '#00f', palette: ['#000', '#f00', '#0f0', '#00f', '#ff0'] },
+    'heatmap': { type: 'static', group: 'Aesthetic', bgTop: '#0000ff', bgBot: '#00ffff', sun: '#ffffff', palette: ['#000088', '#008800', '#ffff00', '#ff0000'] },
+    'ultraviolet': { type: 'static', group: 'Aesthetic', bgTop: '#110022', bgBot: '#330066', sun: '#aa00ff', palette: ['#110022', '#330066', '#6600aa', '#9900ff'] },
+
+    'mars': { type: 'static', group: 'Biomes', bgTop: '#220500', bgBot: '#882200', sun: '#ffccaa', palette: ['#330a00', '#661400', '#992800', '#cc4400'] },
+    'arctic': { type: 'static', group: 'Biomes', bgTop: '#001133', bgBot: '#446688', sun: '#eeffff', palette: ['#223344', '#445566', '#8899aa', '#ddeeff'] },
+    'desert': { type: 'static', group: 'Biomes', bgTop: '#44aacc', bgBot: '#88ccdd', sun: '#ffffcc', palette: ['#663300', '#aa6611', '#dd9933', '#ffcc66'] },
+    'jungle': { type: 'static', group: 'Biomes', bgTop: '#88ccff', bgBot: '#cceeff', sun: '#ffffaa', palette: ['#001100', '#003300', '#225500', '#447711', '#669922'] },
+    'ocean': { type: 'static', group: 'Biomes', bgTop: '#000022', bgBot: '#001144', sun: '#004488', palette: ['#000022', '#000044', '#000066', '#000088', '#0022aa'] },
+    'toxic': { type: 'static', group: 'Biomes', bgTop: '#111', bgBot: '#222', sun: '#0f0', palette: ['#112211', '#224422', '#446622', '#88aa00'] },
+    'volcanic': { type: 'static', group: 'Biomes', bgTop: '#220000', bgBot: '#441111', sun: '#ffaa00', palette: ['#111', '#222', '#333', '#552222', '#aa4444'] },
+    'midnight': { type: 'static', group: 'Biomes', bgTop: '#050510', bgBot: '#101025', sun: '#cccccc', palette: ['#000', '#050515', '#101025', '#151535'] },
+
+    'lime': { type: 'dynamic_hue', group: 'Colors', hBase: 90, hVar: 10, s: 80, lBase: 20, bgTop: '#112200', bgBot: '#335500', sun: '#ccff00' },
+    'gold': { type: 'dynamic_hue', group: 'Colors', hBase: 45, hVar: 5, s: 90, lBase: 20, bgTop: '#332200', bgBot: '#664400', sun: '#ffff00' },
+    'rose': { type: 'dynamic_hue', group: 'Colors', hBase: 340, hVar: 10, s: 60, lBase: 30, bgTop: '#330011', bgBot: '#660022', sun: '#ffccdd' },
+    'slate': { type: 'dynamic_hue', group: 'Colors', hBase: 200, hVar: 0, s: 10, lBase: 20, bgTop: '#111111', bgBot: '#223344', sun: '#ffffff' },
+    'mint': { type: 'dynamic_hue', group: 'Colors', hBase: 150, hVar: 20, s: 50, lBase: 60, bgTop: '#ccffee', bgBot: '#aaffdd', sun: '#ffffff' },
+    'lavender': { type: 'dynamic_hue', group: 'Colors', hBase: 260, hVar: 10, s: 40, lBase: 60, bgTop: '#eebbff', bgBot: '#cc99ff', sun: '#ffffff' },
+    'pumpkin': { type: 'dynamic_hue', group: 'Colors', hBase: 25, hVar: 5, s: 80, lBase: 30, bgTop: '#331100', bgBot: '#662200', sun: '#ffaa00' },
+    'blood': { type: 'dynamic_hue', group: 'Colors', hBase: 0, hVar: 0, s: 90, lBase: 10, bgTop: '#220000', bgBot: '#550000', sun: '#aa0000' },
+    
+    'bee': { type: 'static', group: 'Abstract', bgTop: '#ffcc00', bgBot: '#ffaa00', sun: '#000', palette: ['#000', '#332200', '#665500', '#aa8800', '#ffcc00'] },
+    'patriot': { type: 'static', group: 'Abstract', bgTop: '#000088', bgBot: '#0000aa', sun: '#fff', palette: ['#0000aa', '#aa0000', '#ffffff', '#aa0000'] },
+    'christmas': { type: 'static', group: 'Abstract', bgTop: '#003300', bgBot: '#005500', sun: '#ff0000', palette: ['#002200', '#004400', '#aa0000', '#ff0000', '#ffffff'] },
+    'halloween': { type: 'static', group: 'Abstract', bgTop: '#110022', bgBot: '#331155', sun: '#ff6600', palette: ['#000', '#221100', '#442200', '#ff6600', '#6600cc'] },
+    'zen': { type: 'static', group: 'Abstract', bgTop: '#eebb99', bgBot: '#fff', sun: '#aa0000', palette: ['#000', '#333', '#666', '#999'] },
+    'camou': { type: 'static', group: 'Abstract', bgTop: '#556644', bgBot: '#778866', sun: '#99aa88', palette: ['#221100', '#334422', '#554433', '#667755'] },
+    'construction': { type: 'static', group: 'Abstract', bgTop: '#111', bgBot: '#222', sun: '#ffaa00', palette: ['#111', '#222', '#333', '#ffaa00', '#ffee00'] },
+    'laser': { type: 'static', group: 'Abstract', bgTop: '#000', bgBot: '#001100', sun: '#00ff00', palette: ['#000', '#111', '#00ff00', '#111'] },
+    'barbie': { type: 'dynamic_hue', group: 'Abstract', hBase: 330, hVar: 10, s: 90, lBase: 60, bgTop: '#ff00cc', bgBot: '#ff99dd', sun: '#ffffff' },
+    'solarized': { type: 'static', group: 'Abstract', bgTop: '#002b36', bgBot: '#073642', sun: '#cb4b16', palette: ['#073642', '#586e75', '#839496', '#93a1a1', '#fdf6e3'] },
+};
+
+// --- COLOR ENGINE ---
+function getThemeColors(time, i, totalLayers) {
+    const t = i / totalLayers;
+    const { theme, globalSat: sat } = State;
+    const def = THEMES[theme] || THEMES['natural'];
+    const hsl = (h, s, l) => `hsl(${h}, ${s * sat}%, ${l}%)`;
+
+    // 1. Natural Mode
+    if (def.type === 'dynamic') {
+        const p = getNaturalPalette(time);
+        const hVal = State.hillHue + (t * State.hillVariant);
+        const lVal = p.isNight ? 5 + t*10 : 25 + t*35;
+        const sVal = (p.isNight ? 20 : 40);
+        return { fill: hsl(hVal, sVal, lVal), fog: p.fogHSL, bgTop: p.skyTop, bgBot: p.skyBot, sun: p.sunColor };
+    }
+
+    // 2. Dynamic Hue
+    if (def.type === 'dynamic_hue') {
+        const hVal = def.hBase + (t * def.hVar);
+        const lVal = def.lBase + (t * 15);
+        return { 
+            fill: hsl(hVal, def.s, lVal), 
+            fog: def.bgTop.startsWith('#') ? null : `${def.hBase}, 30%, 20%`, 
+            bgTop: def.bgTop, bgBot: def.bgBot, sun: def.sun 
+        };
+    }
+
+    // 3. Static Palette
+    if (def.type === 'static') {
+        const pal = def.palette;
+        const idx = Math.floor(t * (pal.length - 1));
+        const fill = pal[Math.min(pal.length-1, Math.max(0, idx))];
+        return { fill, fog: null, bgTop: def.bgTop, bgBot: def.bgBot, sun: def.sun };
+    }
+}
+
+function getNaturalPalette(time) {
+    const isNight = time < 0.2 || time > 0.8;
+    const isSunset = time > 0.7 && time < 0.8;
+    const h = State.skyHue;
+    const sat = State.globalSat;
+    const hsl = (h, s, l) => `hsl(${h}, ${s * sat}%, ${l}%)`;
+
+    let skyTop, skyBot, sunColor, fogHSL;
+
+    if (isNight) {
+        skyTop = hsl(h, 60, 5);
+        skyBot = hsl(h + 20, 40, 15);
+        sunColor = '#fff';
+        fogHSL = `${h}, ${30 * sat}%, 10%`;
+    } else if (isSunset) {
+        skyTop = hsl(h + 40, 50, 30);
+        skyBot = hsl(h - 20, 80, 60);
+        sunColor = '#ffaa00';
+        fogHSL = `${h}, ${40 * sat}%, 40%`;
+    } else {
+        skyTop = hsl(h, 60, 40);
+        skyBot = hsl(h - 20, 40, 80);
+        sunColor = '#ffffcc';
+        fogHSL = `${h}, ${20 * sat}%, 80%`;
+    }
+    return { skyTop, skyBot, sunColor, fogHSL, isNight, isSunset };
+}
+
+// --- CORE RENDERER ---
+function generate() {
+    buffer.width = State.width;
+    buffer.height = State.height;
+    
+    const w = buffer.width;
+    const h = buffer.height;
+    const globalCols = getThemeColors(State.time, 0, 6);
+    
+    // Sky
+    const skyGrad = bCtx.createLinearGradient(0, 0, 0, h);
+    skyGrad.addColorStop(0, globalCols.bgTop);
+    skyGrad.addColorStop(1, globalCols.bgBot);
+    bCtx.fillStyle = skyGrad;
+    bCtx.fillRect(0, 0, w, h);
+
+    // Sun
+    const sunX = w * (0.1 + State.celestialX * 0.8);
+    const sunY = h * (0.1 + State.celestialY * 0.8);
+    const sunR = (['gameboy','matrix'].includes(State.theme) ? 15 : 8) * State.celestialScale * (w/320);
+    
+    bCtx.fillStyle = globalCols.sun;
+    bCtx.beginPath();
+    bCtx.arc(sunX, sunY, sunR, 0, Math.PI*2);
+    bCtx.fill();
+
+    // Hills
+    const layers = 6;
+    const themeDef = THEMES[State.theme];
+    
+    for(let i=0; i<layers; i++) {
+        const cols = getThemeColors(State.time, i, layers);
+        const t = i / layers;
+        const yBase = h * (0.4 + t * 0.6);
+        
+        bCtx.fillStyle = cols.fill;
+        bCtx.beginPath();
+        bCtx.moveTo(0, h);
+
+        for (let x = 0; x <= w; x++) {
+            const nx = x / w; 
+            const d = State.detail;
+            const freq1 = 8.0 + (t * 4.0);
+            const freq2 = 25.0 + (d * 10.0);
+            const freq3 = 100.0;
+            const amp = h * (0.1 + t * 0.05); 
+
+            let n = Math.sin(nx * freq1 + State.seed * i) * amp + 
+                    Math.sin(nx * freq2 + State.seed) * (amp * 0.3);
+            
+            if (d > 0.1) {
+                n += Math.sin(nx * freq3 + State.seed * 2) * (amp * 0.05 * d);
+            }
+
+            bCtx.lineTo(x, yBase - n);
+        }
+        
+        bCtx.lineTo(w, h);
+        bCtx.fill();
+
+        if (cols.fog && (!themeDef || themeDef.type.includes('dynamic'))) {
+            const dist = 1 - (i / (layers - 1));
+            let fogAlpha = State.fog * (dist * dist * 1.5 + dist * 0.5); 
+            fogAlpha = Math.min(0.95, Math.max(0, fogAlpha));
+            if (fogAlpha > 0.01) {
+                bCtx.fillStyle = `hsla(${cols.fog}, ${fogAlpha})`;
+                bCtx.fill();
+            }
+        }
+    }
+
+    // Noise Pass (Replaces Scanlines)
+    if (State.noise > 0) {
+        const id = bCtx.getImageData(0, 0, w, h);
+        const d = id.data;
+        // Scale noise by resolution to keep it visible
+        const strength = State.noise; 
+        
+        for (let i = 0; i < d.length; i += 4) {
+            // Monochromatic grain
+            const grain = (Math.random() - 0.5) * strength;
+            d[i] = d[i] + grain;     // R
+            d[i+1] = d[i+1] + grain; // G
+            d[i+2] = d[i+2] + grain; // B
+            // Leave Alpha (d[i+3]) alone
+        }
+        bCtx.putImageData(id, 0, 0);
+    }
+}
+
+// --- DISPLAY LOGIC ---
+let transform = { x: 0, y: 0, scale: 1 };
+function renderToScreen() {
+    const scaleX = canvas.width / buffer.width;
+    const scaleY = canvas.height / buffer.height;
+    const baseScale = Math.max(scaleX, scaleY);
+    
+    const drawW = buffer.width * baseScale * transform.scale;
+    const drawH = buffer.height * baseScale * transform.scale;
+    
+    const maxX = (drawW - canvas.width) / 2;
+    const maxY = (drawH - canvas.height) / 2;
+    transform.x = Math.max(-maxX, Math.min(maxX, transform.x));
+    transform.y = Math.max(-maxY, Math.min(maxY, transform.y));
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = false;
+    const centerX = (canvas.width - drawW) / 2 + transform.x;
+    const centerY = (canvas.height - drawH) / 2 + transform.y;
+    ctx.drawImage(buffer, centerX, centerY, drawW, drawH);
+}
+
+// --- INITIALIZE UI ---
+const themeSelect = document.getElementById('theme-select');
+
+function initThemeSelect() {
+    const groups = {};
+    Object.keys(THEMES).forEach(key => {
+        const g = THEMES[key].group;
+        if (!groups[g]) groups[g] = [];
+        groups[g].push(key);
+    });
+    const title = s => s.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const order = ['Dynamic', 'Aesthetic', 'Retro', 'Biomes', 'Colors', 'Abstract'];
+    
+    order.forEach(g => {
+        if (!groups[g]) return;
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = g;
+        groups[g].forEach(k => {
+            const opt = document.createElement('option');
+            opt.value = k;
+            opt.innerText = title(k);
+            optgroup.appendChild(opt);
+        });
+        themeSelect.appendChild(optgroup);
+    });
+}
+initThemeSelect();
+
+themeSelect.onchange = (e) => {
+    State.theme = e.target.value;
+    updateControls();
+    generate();
+    renderToScreen();
+};
+
+function updateControls() {
+    const c = document.getElementById('dynamic-controls');
+    c.innerHTML = '';
+    
+    const addSlider = (label, key, min, max, step) => {
+        const div = document.createElement('div');
+        div.className = 'ctrl-row';
+        div.innerHTML = `<div class="ctrl-head"><span>${label}</span><span>${State[key].toFixed(2)}</span></div><input type="range" min="${min}" max="${max}" step="${step}" value="${State[key]}">`;
+        div.querySelector('input').oninput = (e) => {
+            State[key] = parseFloat(e.target.value);
+            div.querySelector('.ctrl-head span:last-child').innerText = State[key].toFixed(2);
+            if(key === 'width') State.height = Math.floor(State.width * 0.5625);
+            generate(); renderToScreen();
+        };
+        c.appendChild(div);
+    };
+
+    addSlider('Pixel Resolution', 'width', 32, 640, 16);
+    addSlider('Shape Detail', 'detail', 0, 1, 0.05);
+    addSlider('Noise', 'noise', 0, 50, 5); // Cap at 50
+
+    // Celestial Controls
+    const celHeader = document.createElement('div');
+    celHeader.className = 'section-label'; celHeader.innerText = 'Celestial';
+    c.appendChild(celHeader);
+    addSlider('Sun X', 'celestialX', 0, 1, 0.05);
+    addSlider('Sun Y', 'celestialY', 0, 1, 0.05);
+    addSlider('Sun Size', 'celestialScale', 0.1, 5.0, 0.1);
+
+    const envHeader = document.createElement('div');
+    envHeader.className = 'section-label'; envHeader.innerText = 'Environment';
+    c.appendChild(envHeader);
+
+    if (State.theme === 'natural') {
+        addSlider('Time of Day', 'time', 0, 1, 0.05);
+        addSlider('Atmosphere', 'fog', 0, 1, 0.05);
+        
+        const pHeader = document.createElement('div');
+        pHeader.className = 'section-label'; pHeader.innerText = 'Colors';
+        c.appendChild(pHeader);
+        addSlider('Sky Hue', 'skyHue', 0, 360, 5);
+        addSlider('Hill Hue', 'hillHue', 0, 360, 5);
+        addSlider('Hill Variance', 'hillVariant', -60, 60, 5);
+    } else {
+        if (THEMES[State.theme].type.includes('dynamic')) {
+            addSlider('Atmosphere', 'fog', 0, 1, 0.05);
+        }
+    }
+    
+    addSlider('Saturation', 'globalSat', 0, 2.0, 0.1);
+    themeSelect.value = State.theme;
+}
+
+function randomize() {
+    if (isFading) return;
+    isFading = true;
+    canvas.style.opacity = 0;
+
+    setTimeout(() => {
+        State.seed = Math.random() * 1000;
+        
+        const allThemes = Object.keys(THEMES);
+        if (Math.random() > 0.5) {
+            State.theme = 'natural';
+        } else {
+            State.theme = Rnd.pick(allThemes);
+        }
+
+        const resolutions = [64, 96, 128, 160, 192, 240, 320];
+        State.width = Rnd.pick(resolutions);
+        State.height = Math.floor(State.width * 0.5625);
+
+        State.time = Math.random();
+        State.fog = Math.random() * 0.7;
+        State.detail = Math.random();
+        State.noise = Rnd.int(10, 40); // Random noise level
+        
+        State.celestialX = Math.random();
+        State.celestialY = Math.random() * 0.5; 
+        State.celestialScale = 0.5 + Math.random() * 2.0;
+        
+        State.globalSat = Rnd.val(0.8, 1.2);
+
+        const themeHue = Rnd.int(0, 360);
+        State.skyHue = themeHue + Rnd.val(-30, 30);
+        State.hillHue = themeHue + Rnd.val(-40, 40);
+        if(State.skyHue > 360) State.skyHue -= 360;
+        if(State.hillHue > 360) State.hillHue -= 360;
+        State.hillVariant = Rnd.int(10, 30);
+
+        generate();
+        updateControls();
+        renderToScreen();
+        
+        canvas.style.opacity = 1;
+        isFading = false;
+    }, 400);
+}
+
+// --- EVENTS ---
+let isDragging = false, startX, startY, lastX, lastY;
+let lastDist = 0;
+const menu = document.getElementById('settings');
+const modal = document.getElementById('modal');
+
+canvas.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX; startY = e.clientY; lastX = e.clientX; lastY = e.clientY; });
+window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    transform.x += e.clientX - lastX; transform.y += e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    renderToScreen();
+});
+window.addEventListener('mouseup', (e) => { 
+    isDragging = false; 
+    if (menu.classList.contains('open')) return;
+    if (Math.hypot(e.clientX-startX, e.clientY-startY) < 5 && e.target === canvas) randomize(); 
+});
+
+window.addEventListener('wheel', (e) => { transform.scale = Math.max(1.0, Math.min(5, transform.scale - e.deltaY * 0.001)); renderToScreen(); });
+canvas.addEventListener('touchstart', (e) => { if (e.touches.length === 2) lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }, {passive: false});
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+        const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        transform.scale = Math.max(1.0, Math.min(5, transform.scale + (dist - lastDist) * 0.005));
+        lastDist = dist; renderToScreen();
+    }
+}, {passive: false});
+
+let lastTap = 0;
+canvas.addEventListener('touchend', (e) => { 
+    if (menu.classList.contains('open')) return;
+    const now = Date.now(); 
+    if (now - lastTap < 300) randomize(); 
+    lastTap = now; 
+});
+
+// KEY HANDLER
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (modal.classList.contains('active')) {
+            modal.classList.remove('active');
+        } else if (menu.classList.contains('open')) {
+            menu.classList.remove('open');
+        }
+    }
+});
+
+document.getElementById('menu-btn').onclick = (e) => { e.stopPropagation(); menu.classList.add('open'); };
+document.querySelector('.close-btn').onclick = () => menu.classList.remove('open');
+document.addEventListener('click', (e) => { if (!menu.contains(e.target) && e.target.id !== 'menu-btn') menu.classList.remove('open'); });
+document.getElementById('info-btn').onclick = () => modal.classList.add('active');
+modal.onclick = (e) => { if(e.target === modal) modal.classList.remove('active'); };
+document.getElementById('btn-rand').onclick = () => randomize();
+document.getElementById('btn-reset').onclick = () => { 
+    Object.assign(State, { width:320, height:180, time:0.5, theme: 'natural', skyHue: 200, hillHue: 100, hillVariant: 15, globalSat: 1.0, celestialX: 0.7, celestialY: 0.15, celestialScale: 1.0, fog: 0.4, detail: 0.5, noise: 20 }); 
+    generate(); updateControls(); renderToScreen();
+};
+
+document.getElementById('btn-dl').onclick = () => {
+    const huge = document.createElement('canvas'); 
+    huge.width = 3840; huge.height = 2160;
+    const hCtx = huge.getContext('2d'); 
+    hCtx.imageSmoothingEnabled = false;
+    hCtx.drawImage(buffer, 0, 0, huge.width, huge.height);
+    const link = document.createElement('a'); 
+    link.download = `RollingHills_${Date.now()}.png`; 
+    link.href = huge.toDataURL(); 
+    link.click();
+};
+
+document.getElementById('btn-export').onclick = () => { const blob = new Blob([JSON.stringify(State)], {type: 'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'hills_settings.json'; a.click(); };
+document.getElementById('btn-import').onclick = () => document.getElementById('file-in').click();
+document.getElementById('file-in').onchange = (e) => { const reader = new FileReader(); reader.onload = (ev) => { Object.assign(State, JSON.parse(ev.target.result)); updateControls(); generate(); renderToScreen(); }; reader.readAsText(e.target.files[0]); };
+window.onresize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; renderToScreen(); };
+window.onresize(); updateControls(); randomize();
+</script>
+
+</body></html>
